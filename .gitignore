@@ -23,5 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 # Flask venv, cache
-/src/api/venv
-/src/api/__pycache__
+/api/venv
+/api/__pycache__
