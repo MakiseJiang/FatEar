@@ -8,6 +8,7 @@ import WelcomePage from './pages/Welcome';
 import ErrorPage from './pages/404Error';
 import LoginPage from './pages/Login';
 import Base from './layouts/Base';
+import Home from './pages/Home';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/Login",
     element: <LoginPage />
+  },
+  {
+    path: "/Home",
+    element: <Home />
   }
 ]);
 

@@ -5,8 +5,10 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 import '../static/css/App.css';
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [userInfo, setUserInfo] = useState({
     username: "",
@@ -24,7 +26,14 @@ function LoginPage() {
       body: JSON.stringify(userInfo),
     })
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        console.log(data);
+
+        // Redirect to user's homePage
+        if (data.passed) {
+          navigate('/Home');
+        }
+      });
   };
 
   const handleChange = (event) => {

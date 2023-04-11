@@ -1,25 +1,43 @@
 import "../static/css/sidebar.css";
+import { Drawer, List, ListItem, ListItemIcon, ListItemButton, ListItemText } from "@mui/material";
 
-function SidebarLink({ text }) {
-    return(
-      <div className="link" >
-          <h2>{text}</h2>
-      </div>
-    );
-}
+import HomeIcon from '@mui/icons-material/Home';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import MessageIcon from '@mui/icons-material/Message';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useEffect } from "react";
 
-function Sidebar(){
-  return(
-    <div className="sidebar">
-        <SidebarLink text="Home" />
-        <SidebarLink text="Explore" />
-        <SidebarLink text="Notifications" />
-        <SidebarLink text="Messages" />
-        <SidebarLink text="Bookmarks" />
-        <SidebarLink text="Lists" />
-        <SidebarLink text="Profile" />
-        <SidebarLink text="More" />
-    </div>
+function Sidebar(props){
+  console.log('drawerWidth is %d', props.width);
+
+  const textIcons = [
+    { text: 'Home', icon: <HomeIcon /> },
+    { text: 'Following', icon: <FavoriteIcon /> },
+    { text: 'Message', icon: <MessageIcon /> },
+    { text: 'Notification', icon: <NotificationsNoneIcon /> },
+    { text: 'Profile', icon: <AccountCircleIcon />}
+  ];
+
+  return( 
+    <Drawer anchor="left" variant="permanent"
+    sx={{'& .MuiDrawer-paper': { boxSizing: 'border-box', width: props.width }}}
+    open
+    >
+      
+      <List >
+          {textIcons.map(item => (
+            <ListItem key={item.text} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+          </List>
+    </Drawer>
   );
 }
 

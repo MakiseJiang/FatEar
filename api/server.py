@@ -20,7 +20,7 @@ def Hello():
 def getCurrentTime():
     return {'time': time.time()}
 
-@app.route("/LoginAuth", methods=["POST"])
+@app.route("/LoginAuth", methods=["POST", "GET"])
 def submit_form():
     # Grab data json from frontend
     data = request.json
@@ -34,14 +34,6 @@ def submit_form():
     db_data = cursor.fetchone()
     cursor.close()
     
-    error = None
-    if(db_data):
-        #creates a session for the the user
-        #session is a built in
-        print("Login Success!")
-    else:
-        #returns an error message to the html page
-        error = 'Invalid login or username'
-        print(error)
-
-    return data
+    passed = True if db_data else False  
+   
+    return {"userdata": data, "passed": passed}

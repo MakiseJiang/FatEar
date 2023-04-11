@@ -3,7 +3,7 @@ import { Container } from "@mui/material";
 const Base = ({ children }) => {
     return (
         <Container 
-        maxWidth='sm'
+        maxWidth='md'
         display="flex"
         justify="center"
         alignitems="center">
