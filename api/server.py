@@ -16,12 +16,14 @@ app = Flask(__name__)
 def Hello():
     return "<p>Hello, world!</p>"
 
+# Test
 @app.route('/time')
 def getCurrentTime():
     return {'time': time.time()}
 
+# Handles user login
 @app.route("/LoginAuth", methods=["POST", "GET"])
-def submit_form():
+def submit_loginForm():
     # Grab data json from frontend
     data = request.json
     username = data.get('username')
@@ -37,3 +39,24 @@ def submit_form():
     passed = True if db_data else False  
    
     return {"userdata": data, "passed": passed}
+
+
+# Handles search function
+@app.route("/search", methods=["POST", "GET"])
+def submit_searchQuery():
+    data = request.json
+    songname = data.get('songname')
+
+    cursor = conn.cursor()
+    query = 'SELECT * FROM song WHERE title = %s'
+    cursor.execute(query, songname)
+    db_data = cursor.fetchall()
+    cursor.close()
+
+    # Pack results in json
+    json_data = []
+    for result in db_data:
+        json_data.append(result)
+
+    return jsonify(json_data)
+

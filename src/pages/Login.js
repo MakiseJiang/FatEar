@@ -27,9 +27,7 @@ function LoginPage() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-
-        // Redirect to user's homePage
+        // If passed loginauth, redirect to user's homePage
         if (data.passed) {
           navigate('/Home');
         }
