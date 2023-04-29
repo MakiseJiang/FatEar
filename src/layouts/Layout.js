@@ -6,19 +6,18 @@ import { Box } from '@mui/material';
 
 const drawerWidth = "240px";
 
-function Layout({ children }) {
-    console.log(`calc(100% - ${drawerWidth}px)`)
+function Layout(props) {
   return (
-    <div className='WelcomePage'>
+    <div>
       <Sidebar width={drawerWidth}/>
       <Box
       component="main"
       sx={{ flexGrow: 1, p: 3, marginLeft: drawerWidth}}>
-        {children}
+        {props.children}
       </Box>
 
     </div>
-  );
+  )
 }
 
 export default Layout;

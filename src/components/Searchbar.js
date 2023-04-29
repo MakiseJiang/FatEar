@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { IconButton, TextField } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
@@ -10,7 +11,7 @@ function SearchBar() {
     // Handle click on search
     const handleSubmit = (event) => {
         event.preventDefault();
-        fetch("/search", {
+        fetch("/Search", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(searchQuery),
@@ -48,6 +49,7 @@ function SearchBar() {
             <div key={record.songID}>
             <p >{record.title} </p>
             <p>{record.songURL}</p>
+            <Link to={`/song/${record.songID}`}>View</Link>
             </div>
         )
     })}

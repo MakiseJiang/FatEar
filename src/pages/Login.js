@@ -7,13 +7,13 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import '../static/css/App.css';
 import { useNavigate } from 'react-router-dom';
 
-function LoginPage() {
+function LoginPage({ saveToken }) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [userInfo, setUserInfo] = useState({
     username: "",
     password: "",
-  })
+  });
   // Handles show password icon
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
@@ -29,7 +29,9 @@ function LoginPage() {
       .then((data) => {
         // If passed loginauth, redirect to user's homePage
         if (data.passed) {
-          navigate('/Home');
+          saveToken(userInfo.username);
+        } else {
+          alert('Invalid account or password!');
         }
       });
   };

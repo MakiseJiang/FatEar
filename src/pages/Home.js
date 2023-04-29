@@ -5,14 +5,13 @@ import Layout from '../layouts/Layout';
 import SearchBar from '../components/Searchbar';
 
 
-function Home() {
+function HomePage({ userToken }) {
   return (
-    <Layout>
-        <SearchBar />
-        <p>Your Profile</p>
+    <Layout token={ userToken }>
+        <SearchBar/>
     </Layout>
 
   );
 }
 
-export default Home;
+export default HomePage;

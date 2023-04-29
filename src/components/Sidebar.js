@@ -1,5 +1,6 @@
 import "../static/css/sidebar.css";
 import { Drawer, List, ListItem, ListItemIcon, ListItemButton, ListItemText } from "@mui/material";
+import { Link } from "react-router-dom";
 
 import HomeIcon from '@mui/icons-material/Home';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -11,11 +12,10 @@ function Sidebar(props){
   console.log('drawerWidth is %d', props.width);
 
   const textIcons = [
-    { text: 'Home', icon: <HomeIcon /> },
-    { text: 'Following', icon: <FavoriteIcon /> },
-    { text: 'Message', icon: <MessageIcon /> },
-    { text: 'Notification', icon: <NotificationsNoneIcon /> },
-    { text: 'Profile', icon: <AccountCircleIcon />}
+    { text: 'News', icon: <HomeIcon />, to: '/news'},
+    { text: 'Following', icon: <FavoriteIcon />, to: '/following' },
+    { text: 'Notification', icon: <NotificationsNoneIcon/>, to: '/notification'},
+    { text: 'Profile', icon: <AccountCircleIcon />, to: '/profile'}
   ];
 
   return( 
@@ -27,7 +27,7 @@ function Sidebar(props){
       <List >
           {textIcons.map(item => (
             <ListItem key={item.text} disablePadding>
-              <ListItemButton>
+              <ListItemButton LinkComponent={Link} to={item.to}>
                 <ListItemIcon>
                   {item.icon}
                 </ListItemIcon>
