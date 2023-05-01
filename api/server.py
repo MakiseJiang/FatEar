@@ -14,15 +14,6 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'why would I tell you my secret key?'
 
-@app.route('/')
-def Hello():
-    return "<p>Hello, world!</p>"
-
-# Test
-@app.route('/time')
-def getCurrentTime():
-    return {'time': time.time()}
-
 # Handles user login
 @app.route("/LoginAuth", methods=["POST", "GET"])
 def submit_loginForm():
@@ -70,19 +61,29 @@ def getItem_Info():
     data = request.json
     itemType = data.get('item_type') 
     itemID = data.get('item_id')
+    reviews = []
  
     cursor = conn.cursor(pymysql.cursors.DictCursor)
 
+    # Get song info and its reviews
     if itemType == 'song':
         cursor.execute('SELECT songID, title, releaseDate, songURL, artist.fname, artist.lname \
                        FROM song NATURAL JOIN artistPerformsSong NATURAL JOIN artist  \
-                       WHERE songID = %s', itemID)
+                       WHERE songID = %s', itemID) 
+        db_data = cursor.fetchone()
+        query = 'SELECT * FROM reviewSong NATURAL JOIN user WHERE songID = %s'
+        cursor.execute(query, itemID)
+        reviewTexts_data = cursor.fetchall()
+
+        for result in reviewTexts_data:
+            reviews.append(result)
+        db_data['reviews'] = reviews
+
     elif itemType == 'artist':
         cursor.execute('SELECT * FROM artist WHERE artistID = %s', itemID)
     else:
         cursor.execute('SELECT * FROM album WHERE albumID = %s', itemID)
 
-    db_data = cursor.fetchone()
     cursor.close()
  
     return jsonify(db_data) 
@@ -107,6 +108,34 @@ def postReview():
     cursor.close()
 
     return {"success": True}
+ 
+# Get user's friends data
+@app.route("/GetFriends", methods=["GET"])
+def getFriends():
+    username = session['username']
+
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    query = 'SELECT fname, lname, username              \
+            FROM user JOIN friend ON username = user2   \
+            WHERE user1 = %s AND acceptStatus = %s'
+    cursor.execute(query, (username, 'Accepted'))
+    db_data = cursor.fetchall()
+    cursor.close()
+
+    return db_data
+    
+@app.route("/GetNotifications", methods=["GET"])
+def getNotifications():
+    username = session['username']
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    query = 'SELECT fname, lname, username              \
+            FROM user JOIN friend on username = user1   \
+            WHERE user2 = %s AND acceptStatus = %s'
+    cursor.execute(query, (username, 'Pending'))
+    db_data = cursor.fetchall()
+    cursor.close()
+
+    return db_data 
 
 
 

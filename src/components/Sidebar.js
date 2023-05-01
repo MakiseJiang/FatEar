@@ -1,19 +1,21 @@
 import "../static/css/sidebar.css";
-import { Drawer, List, ListItem, ListItemIcon, ListItemButton, ListItemText } from "@mui/material";
+import { Drawer, List, ListItem, ListItemIcon, ListItemButton, ListItemText, Badge } from "@mui/material";
 import { Link } from "react-router-dom";
 
-import HomeIcon from '@mui/icons-material/Home';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import MessageIcon from '@mui/icons-material/Message';
+import HeadphonesIcon from '@mui/icons-material/Headphones';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import SearchIcon from '@mui/icons-material/Search';
+import PeopleIcon from '@mui/icons-material/People';
 
 function Sidebar(props){
-  console.log('drawerWidth is %d', props.width);
 
   const textIcons = [
-    { text: 'News', icon: <HomeIcon />, to: '/news'},
-    { text: 'Following', icon: <FavoriteIcon />, to: '/following' },
+    { text: 'Search', icon: <SearchIcon />, to: '/'},
+    { text: 'News', icon: <HeadphonesIcon />, to: '/news'},
+    { text: 'Subscription', icon: <FavoriteIcon />, to: '/subscription' },
+    { text: 'Friends', icon: <PeopleIcon />, to: '/friends'},
     { text: 'Notification', icon: <NotificationsNoneIcon/>, to: '/notification'},
     { text: 'Profile', icon: <AccountCircleIcon />, to: '/profile'}
   ];
@@ -29,7 +31,9 @@ function Sidebar(props){
             <ListItem key={item.text} disablePadding>
               <ListItemButton LinkComponent={Link} to={item.to}>
                 <ListItemIcon>
-                  {item.icon}
+                  {(item.text == 'Notification') ? 
+                  <Badge color="secondary" variant="dot">{item.icon}</Badge>
+                  : item.icon}
                 </ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItemButton>

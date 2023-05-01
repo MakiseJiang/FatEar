@@ -4,16 +4,17 @@ import '../static/css/App.css';
 
 import { Stack, Button, TextField, Snackbar, Alert } from '@mui/material';
 
-function View(props) {
+function ViewPage(props) {
     const { sid } = useParams();
     const [viewData, setData] = useState({});
+    const [reviews, setReviews] = useState([]); 
     const [userPost, setPost] = useState({
         songID: sid,
         rate: 0,
         reviewContent: "",
     });
 
-    const fetchData = async () => {
+    const fetchData = () => {
         fetch("/GetItem", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -21,7 +22,8 @@ function View(props) {
         })
             .then((response) => response.json())
             .then((data) => {
-            setData(data)
+            setData(data);
+            setReviews(data.reviews);
         });
     };
     
@@ -37,6 +39,11 @@ function View(props) {
             .then((data) => {
                 handleStatusCheck(data);
             });
+        setPost({
+            songID: sid,
+            rate: 0,
+            reviewContent: "",
+        });
     };
 
     const handleChange = (event) => {
@@ -54,9 +61,24 @@ function View(props) {
         }
     }
 
+    const handleSnackClose = () => {
+        setOpensuc(false);
+    };
+
     useEffect(() => {
         fetchData();
     }, []);
+
+    // Review List
+    const reviewList = reviews.map((review) => {
+        return (
+            <div key={review.username}>
+                <p>{review.reviewDate}</p>
+                <p>{review.fname} {review.lname} said: {review.reviewText}</p>
+            </div>
+        );
+    });
+
 
     return (
         <div>
@@ -64,6 +86,7 @@ function View(props) {
             <p>By {viewData.fname} {viewData.lname}</p>
             <p>{viewData.songURL}</p>
             <p>Release Date: {viewData.releaseDate}</p>
+
 
             {/* Comment and rating form */}
             <form onSubmit={handleSubmit}>
@@ -76,14 +99,15 @@ function View(props) {
                     rows={4}
                     fullWidth
                     name='reviewContent'
+                    value={userPost.reviewContent}
                     onChange={handleChange}
                   />
 
                 <Button type="submit" variant="contained">Post Comment</Button>
                 </Stack>
             </form>
-            <Snackbar open={opensuc} autoHideDuration={1500}>
-              <Alert severity="success" sx={{ width: '100%' }}>
+            <Snackbar open={opensuc} autoHideDuration={1500} onClose={handleSnackClose}>
+              <Alert severity="success" variant='filled' sx={{ width: '100%' }}>
                 Submit success!
               </Alert>
             </Snackbar>
@@ -92,8 +116,10 @@ function View(props) {
                 Oops! Something went wrong.
               </Alert>
             </Snackbar>
+
+            {reviewList}
         </div>
     );
 }
 
-export default View;
+export default ViewPage;

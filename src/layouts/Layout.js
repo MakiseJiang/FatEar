@@ -6,14 +6,14 @@ import { Box } from '@mui/material';
 
 const drawerWidth = "240px";
 
-function Layout(props) {
+function Layout({ children }) {
   return (
     <div>
-      <Sidebar width={drawerWidth}/>
+      <Sidebar width={drawerWidth} />
       <Box
       component="main"
       sx={{ flexGrow: 1, p: 3, marginLeft: drawerWidth}}>
-        {props.children}
+        {children}
       </Box>
 
     </div>
