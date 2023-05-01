@@ -124,6 +124,7 @@ def getFriends():
 
     return db_data
     
+# Get new friends request    
 @app.route("/GetNotifications", methods=["GET"])
 def getNotifications():
     username = session['username']
@@ -136,6 +137,50 @@ def getNotifications():
     cursor.close()
 
     return db_data 
+
+# Get News:
+# New song released by subsribed (fanOf) artist
+# New review posted by following and friends
+@app.route("/GetNews", methods=["GET"])
+def getNews():
+    username = session["username"]
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    # Get new reviews
+    query = "SELECT username, title, reviewText, reviewDate \
+            FROM reviewSong NATURAL JOIN song   \
+            WHERE username IN (                 \
+                SELECT follows                  \
+                FROM follows                    \
+                WHERE follower = %s             \
+                UNION                           \
+                SELECT user2                    \
+                FROM friend                     \
+                WHERE user1 = %s                \
+                AND acceptStatus = 'Accepted'   \
+            )                                   \
+            AND reviewDate > (                  \
+                SELECT lastlogin                \
+                FROM user                       \
+                where username = %s             \
+            )"
+    cursor.execute(query, (username, username, username))
+    new_reviews = cursor.fetchall()
+    # Get new songs
+    query = "SELECT title, songURL                      \
+            FROM song NATURAL JOIN artistPerformsSong   \
+            WHERE artistID IN(                          \
+                SELECT artistID                         \
+                FROM userFanOfArtist                    \
+                WHERE username = %s                     \
+            ) AND releaseDate > (                       \
+                SELECT lastlogin                        \
+                FROM user WHERE username = %s           \
+            )"
+    cursor.execute(query, (username, username))
+    new_songs = cursor.fetchall()
+    cursor.close()
+
+    return {"new_reviews": new_reviews, "new_songs": new_songs}
 
 
 

@@ -9,6 +9,7 @@ import './static/css/App.css'
 import ViewPage from './pages/View';
 import FriendPage from './pages/Friend';
 import NotificationPage from './pages/Notification';
+import NewsPage from './pages/News';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
     <Layout >
       <Routes>
         <Route exact path='/' element={<SearchBar />}/>
+        <Route path='/news' element={<NewsPage />}/>
         <Route path='/friends' element={<FriendPage />}/>
         <Route path='/notification' element={<NotificationPage />}/>
         <Route path='/song/:sid' element={<ViewPage />}/>
