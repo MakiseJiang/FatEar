@@ -44,7 +44,6 @@ function SearchBar() {
         </IconButton>
     </form>
 
-    {console.log(searchResult)}
     {searchResult.map((record) => {
         return (
             <div key={record.songID}>

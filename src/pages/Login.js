@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 
 import { TextField, InputAdornment, IconButton, Button, Stack} from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -7,7 +8,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import '../static/css/App.css';
 import { useNavigate } from 'react-router-dom';
 
-function LoginPage({ saveToken }) {
+function LoginPage(props) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [userInfo, setUserInfo] = useState({
@@ -20,7 +21,7 @@ function LoginPage({ saveToken }) {
   // Handles click on Login
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetch("/LoginAuth", {
+    fetch("/token", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userInfo),
@@ -28,8 +29,8 @@ function LoginPage({ saveToken }) {
       .then((response) => response.json())
       .then((data) => {
         // If passed loginauth, redirect to user's homePage
-        if (data.passed) {
-          saveToken(userInfo.username);
+        if (data.status == 'success') {
+          props.setToken(data.access_token)
         } else {
           alert('Invalid account or password!');
         }

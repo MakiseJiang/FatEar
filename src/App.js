@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
+import React from 'react';
+import {  Navigate, Route, Routes } from 'react-router-dom';
 
 import LoginPage from './pages/Login';
 import Layout from './layouts/Layout';
 import SearchBar from './components/Searchbar';
+import useToken from './components/useToken';
 
 import './static/css/App.css'
 import ViewPage from './pages/View';
@@ -13,33 +14,24 @@ import NewsPage from './pages/News';
 
 
 function App() {
-  const [token, setToken] = useState();
-
-
-  
-
-  
-
-  // const handleLogout = (e) => {
-  //   e.preventDefault();
-  //   setToken(null);
-  // }
-
-  // if (!token) {
-  //   return <LoginPage saveToken={ setToken } />
-  // }
-  
+  const { token, removeToken, setToken } = useToken();
 
   return (
-    <Layout >
-      <Routes>
-        <Route exact path='/' element={<SearchBar />}/>
-        <Route path='/news' element={<NewsPage />}/>
-        <Route path='/friends' element={<FriendPage />}/>
-        <Route path='/notification' element={<NotificationPage />}/>
-        <Route path='/song/:sid' element={<ViewPage />}/>
-      </Routes>
-    </Layout>
+    <div>
+      {!token && token!=="" && token!== undefined?
+      <LoginPage setToken={setToken} />
+      :(
+        <Layout token={removeToken}>
+          <Routes>
+            <Route exact path='/' element={<SearchBar />}/>
+            <Route path='/news' element={<NewsPage token={token}/>}/>
+            <Route path='/friends' element={<FriendPage token={token}/>}/>
+            <Route path='/notification' element={<NotificationPage token={token}/>}/>
+            <Route path='/song/:sid' element={<ViewPage token={token}/>}/>
+          </Routes>
+          </Layout>
+      )}
+    </div>
   )
 }
 

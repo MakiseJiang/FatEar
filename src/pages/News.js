@@ -6,6 +6,9 @@ function NewsPage(props) {
     const fetchNews = async () => {
         fetch("/GetNews", {
             method: "GET",
+            headers: {
+                Authorization: 'Bearer ' + props.token
+            },
         })
             .then((response) => response.json())
             .then((data) => {

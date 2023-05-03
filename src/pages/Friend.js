@@ -7,6 +7,9 @@ function FriendPage(props) {
     const fetchFriendsData = async () => {
         fetch("/GetFriends", {
             method: "GET",
+            headers: {
+                Authorization: 'Bearer ' + props.token
+            }
         })
             .then((response) => response.json())
             .then((data) => {

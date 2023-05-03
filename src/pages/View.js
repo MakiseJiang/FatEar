@@ -32,7 +32,11 @@ function ViewPage(props) {
         e.preventDefault();
         fetch("/Submit-review-rating", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers:
+            { 
+                "Content-Type": "application/json",
+                Authorization: 'Bearer ' + props.token,
+            },
             body: JSON.stringify(userPost),
           })
             .then((response) => response.json())
@@ -63,6 +67,7 @@ function ViewPage(props) {
 
     const handleSnackClose = () => {
         setOpensuc(false);
+        setOpenfai(false);
     };
 
     useEffect(() => {
@@ -111,8 +116,8 @@ function ViewPage(props) {
                 Submit success!
               </Alert>
             </Snackbar>
-            <Snackbar open={openfai} autoHideDuration={1500}>
-              <Alert  severity="error" sx={{ width: '100%' }}>
+            <Snackbar open={openfai} autoHideDuration={1500} onClose={handleSnackClose}>
+              <Alert  severity="error" sx={{ width: '100%' }} >
                 Oops! Something went wrong.
               </Alert>
             </Snackbar>
