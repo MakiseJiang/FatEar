@@ -14,15 +14,20 @@ function useToken() {
     setToken(userToken);
   };
 
+
   function removeToken() {
     localStorage.removeItem("token");
+    if (localStorage.getItem('Visitor') != null) {
+      localStorage.removeItem('Visitor');
+    }
     setToken(null);
   }
+
 
   return {
     setToken: saveToken,
     token,
-    removeToken
+    removeToken,
   }
 
 }

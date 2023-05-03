@@ -48,11 +48,13 @@ function Sidebar(props){
           <Button color="inherit" onClick={handleClick}>Logout</Button>
         </Toolbar>
       </AppBar>
+    {localStorage.getItem("Visitor")==null ? 
     <Drawer variant="permanent"
     sx={{ flexShrink: 0, '& .MuiDrawer-paper': { boxSizing: 'border-box', width: props.width }}}
     open
     >
       <Toolbar />
+
         <Box sx={{ overflow: 'auto' }}>
           <List >
             {textIcons.map(item => (
@@ -70,6 +72,9 @@ function Sidebar(props){
           </List>
           </Box>
     </Drawer>
+    :(
+      <></>
+    )}
     </div>
   );
 }

@@ -28,6 +28,7 @@ def submit_loginForm():
     data = request.json
     username = data.get('username')
     password = data.get('password')
+    isVisitor = data.get('isVisitor')
     
     # Create cursor to send queries, execute query
     cursor = conn.cursor()
@@ -39,6 +40,9 @@ def submit_loginForm():
     passed = True if db_data else False
     if (passed):
         access_token = create_access_token(identity=username)
+        return {'status': 'success', 'access_token': access_token}
+    if (isVisitor):
+        access_token = create_access_token(identity='predefinedVisitorIdinSystem')
         return {'status': 'success', 'access_token': access_token}
     return {'status': 'error', 'message': 'Invalid username password combination'}, 401
 

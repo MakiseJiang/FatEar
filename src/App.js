@@ -19,7 +19,7 @@ function App() {
   return (
     <div>
       {!token && token!=="" && token!== undefined?
-      <LoginPage setToken={setToken} />
+      <LoginPage setToken={setToken}/>
       :(
         <Layout token={removeToken}>
           <Routes>

@@ -94,6 +94,7 @@ function ViewPage(props) {
 
 
             {/* Comment and rating form */}
+            {localStorage.getItem('Visitor') == null ?
             <form onSubmit={handleSubmit}>
                 <Stack spacing={2} direction="column">
                   <TextField
@@ -111,6 +112,8 @@ function ViewPage(props) {
                 <Button type="submit" variant="contained">Post Comment</Button>
                 </Stack>
             </form>
+            :
+            (<></>)}
             <Snackbar open={opensuc} autoHideDuration={1500} onClose={handleSnackClose}>
               <Alert severity="success" variant='filled' sx={{ width: '100%' }}>
                 Submit success!

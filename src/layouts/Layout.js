@@ -10,7 +10,7 @@ const drawerWidth = "240px";
 function Layout(props) {
   return (
     <div>
-      <Sidebar width={drawerWidth} token={props.token} />
+      <Sidebar width={drawerWidth} token={props.token}/>
       <Box
       component="main"
       sx={{ flexGrow: 1, p: 5, marginLeft: drawerWidth, overflow: 'auto'}}>

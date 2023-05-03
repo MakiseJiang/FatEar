@@ -14,6 +14,7 @@ function LoginPage(props) {
   const [userInfo, setUserInfo] = useState({
     username: "",
     password: "",
+    isVisitor: false,
   });
   // Handles show password icon
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -36,6 +37,15 @@ function LoginPage(props) {
         }
       });
   };
+
+  const handleSkip = () => {
+    setUserInfo({
+      username: "",
+      password: "",
+      isVisitor: true,
+    })
+    localStorage.setItem("Visitor", "test");
+  }
 
   const handleChange = (event) => {
     setUserInfo({ ...userInfo, [event.target.name]: event.target.value });
@@ -76,6 +86,7 @@ function LoginPage(props) {
         <Stack spacing={2} direction='column'>
           <Button type="submit" variant="outlined" style={{ marginLeft: "200px", marginRight:"200px"}}>Login</Button>
           <Button variant="contained" style={{ marginLeft: "200px", marginRight:"200px"}}>Sign Up</Button>
+          <Button type="submit" onClick={handleSkip}>Skip</Button>
         </Stack>
 
 
