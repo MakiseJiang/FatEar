@@ -35,7 +35,6 @@ function Sidebar(props){
     { text: 'Subscription', icon: <FavoriteIcon />, to: '/subscription' },
     { text: 'Friends', icon: <PeopleIcon />, to: '/friends'},
     { text: 'Notification', icon: <NotificationsNoneIcon/>, to: '/notification'},
-    { text: 'Profile', icon: <AccountCircleIcon />, to: '/profile'}
   ];
 
   return(

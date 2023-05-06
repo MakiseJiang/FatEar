@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 
 import { TextField, InputAdornment, IconButton, Button, Stack} from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -38,13 +38,14 @@ function LoginPage(props) {
       });
   };
 
-  const handleSkip = () => {
+  const handleSkip = (e) => {
     setUserInfo({
       username: "",
       password: "",
       isVisitor: true,
     })
     localStorage.setItem("Visitor", "test");
+    navigate('/');
   }
 
   const handleChange = (event) => {

@@ -79,17 +79,41 @@ def submit_searchQuery():
     songname = data.get('songname') 
 
     cursor = conn.cursor()
-    query = 'SELECT * FROM song WHERE title = %s'
-    cursor.execute(query, songname)
+    query = 'SELECT * FROM song WHERE title LIKE %s'
+    re = '%' + songname + '%'
+    cursor.execute(query, re)
     db_data = cursor.fetchall()
     cursor.close()
-
+    
     # Pack results in json
     json_data = []
     for result in db_data:
         json_data.append(result)
 
     return jsonify(json_data)
+
+# Handles search user function
+@app.route("/SearchUser", methods=["POST"])
+@jwt_required()
+def submit_userSearch():
+    data = request.json
+    username = data.get('username')
+    main_user = get_jwt_identity()
+    response = {'non-friends': []}
+
+    cursor = conn.cursor()
+
+    # Get those who are strangers
+    query = 'SELECT * FROM user WHERE username LIKE %s AND username NOT IN (SELECT user2 FROM friend WHERE user1 = %s) AND username <> %s'
+    re = '%' + username + '%'
+    cursor.execute(query, (re, main_user, main_user))
+    db_data = cursor.fetchall()
+    if db_data:
+        response['non-friends'] = db_data
+
+    cursor.close()
+
+    return response
 
 # Get item info from mysql
 @app.route("/GetItem", methods=["POST", "GET"])
@@ -160,6 +184,54 @@ def getFriends():
     cursor.close()
 
     return db_data if db_data else []
+
+# Set a new friend request
+@app.route("/FriendRequest", methods=["POST"])
+@jwt_required()
+def friendRequest():
+    data = request.json
+    user2 = data.get('target')
+
+    username = get_jwt_identity()
+    cursor = conn.cursor()
+    query = 'INSERT INTO friend (user1, user2, acceptStatus, requestSentBy, createdAt, updatedAt)   \
+            VALUES (%s, %s, %s, %s, %s, %s)'
+    params = (username, user2, 'Pending', username, date.today(), date.today())
+    cursor.execute(query, params)
+    conn.commit()
+    cursor.close()
+
+    return {'status': 'success'}
+
+# Handle a friend request from others
+@app.route("/HandleRequest", methods=["POST"])
+@jwt_required()
+def handleFriendRequest():
+    data = request.json
+    user = get_jwt_identity()
+    target = data.get('target')
+    action = data.get('action')
+
+
+    cursor = conn.cursor()
+    query = 'UPDATE friend SET acceptStatus = %s, updatedAt = %s WHERE user1 = %s AND user2 = %s'
+    if action == 'decline':
+        cursor.execute(query, ('Not accepted', date.today(), target, user))
+        conn.commit()
+    elif action == 'accept':
+        cursor.execute(query, ('Accepted', date.today(), target, user))
+
+        conn.commit()
+        cursor.execute(query='INSERT INTO friend (user1, user2, acceptStatus, requestSentBy, createdAt, updatedAt)  \
+                       VALUES (%s, %s, %s, %s, %s, %s) \
+                       ON DUPLICATE KEY UPDATE \
+                       acceptStatus = VALUES(acceptStatus), requestSentBy = VALUES(requestSentBy), createdAt = VALUES(createdAt), updatedAt = VALUES(updatedAt) \
+                       ', args=(user, target, 'Accepted', user, date.today(), date.today()))
+        conn.commit()
+
+    cursor.close()
+    return {'status': 'success'}
+
     
 # Get new friends request    
 

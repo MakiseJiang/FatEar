@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "../static/css/App.css"
 
+
+
 function NewsPage(props) {
-    const[newsData, setNewsData] = useState({});
+    const[newsData, setNewsData] = useState({'new_reviews': [], 'new_songs': []});
     const fetchNews = async () => {
         fetch("/GetNews", {
             method: "GET",
@@ -15,6 +17,7 @@ function NewsPage(props) {
             setNewsData(data);
         });
     };
+
 
     useEffect(() => {
         fetchNews();

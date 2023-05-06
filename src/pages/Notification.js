@@ -25,7 +25,7 @@ function NotificationPage(props) {
     return (
         <div>
             <h1>New Notifications</h1>
-            <NotificationList datalist={notifies} />
+            <NotificationList datalist={notifies} token={props.token} />
         </div>
     )
 }

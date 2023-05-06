@@ -11,6 +11,7 @@ import ViewPage from './pages/View';
 import FriendPage from './pages/Friend';
 import NotificationPage from './pages/Notification';
 import NewsPage from './pages/News';
+import SearchUserPage from './pages/SearchUser';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             <Route path='/news' element={<NewsPage token={token}/>}/>
             <Route path='/friends' element={<FriendPage token={token}/>}/>
             <Route path='/notification' element={<NotificationPage token={token}/>}/>
+            <Route path='/searchUser' element={<SearchUserPage token={token} />}/>
             <Route path='/song/:sid' element={<ViewPage token={token}/>}/>
           </Routes>
           </Layout>
